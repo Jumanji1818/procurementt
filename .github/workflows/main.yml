@@ -29,20 +29,19 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      # Install only packages that still exist (no obsolete "tools")
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
           packages: platform-tools platforms;android-34 build-tools;34.0.0
 
       - name: Install npm dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build web app (Vite)
         run: npm run build
 
       - name: Install Capacitor
-        run: npm install @capacitor/core @capacitor/cli @capacitor/android
+        run: npm install --legacy-peer-deps @capacitor/core @capacitor/cli @capacitor/android
 
       - name: Init Capacitor and add Android
         run: |
@@ -67,11 +66,4 @@ jobs:
           fi
           echo "Found: $APK"
           ls -lh "$APK"
-          echo "path=$APK" >> "$GITHUB_OUTPUT"
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: procura-apk
-          path: ${{ steps.apk.outputs.path }}
-          if-no-files-found: error
+          echo "path=

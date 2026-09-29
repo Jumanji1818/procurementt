@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          # no cache — repo has no package-lock.json
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -30,8 +29,11 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      # Install only packages that still exist (no obsolete "tools")
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-34 build-tools;34.0.0
 
       - name: Install npm dependencies
         run: npm install

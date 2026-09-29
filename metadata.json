@@ -1,0 +1,6 @@
+{
+  "name": "Procura - Smart Adaptive Procurement Management System",
+  "description": "Universal procurement management platform with adaptive workflows, automated inventory tracking, 3-way matching, RFQs, vendor analytics, and multi-language support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

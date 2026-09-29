@@ -1,0 +1,27 @@
+{
+  "id": "/",
+  "name": "Procura - Smart Procurement Management System",
+  "short_name": "Procura",
+  "description": "Universal procurement management platform with adaptive workflows, multi-entity inventory tracking, 3-way matching, RFQs, vendor analytics, and multi-language support.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090d16",
+  "theme_color": "#0f172a",
+  "categories": ["business", "productivity", "finance"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

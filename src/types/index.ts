@@ -103,6 +103,7 @@ export interface RequestItem {
   quantity: number;
   unit: string;
   estimatedUnitPrice: number;
+  unitPrice?: number;
   totalPrice: number;
 }
 
@@ -110,28 +111,31 @@ export interface ProcurementRequest {
   id: string;
   requestNumber: string;
   title: string;
-  description: string;
+  description?: string;
   requesterId: string;
   requesterName: string;
   departmentId?: string;
   departmentName?: string;
   locationId?: string;
   locationName?: string;
-  category: string;
+  category?: string;
   priority: RequestPriority;
-  requiredDate: string;
+  requiredDate?: string;
   estimatedBudget: number;
-  fundingSource: string;
+  currency?: string;
+  fundingSource?: string;
   budgetCode?: string;
-  justification: string;
+  justification?: string;
+  businessJustification?: string;
   technicalSpecs?: string;
   status: RequestStatus;
   items: RequestItem[];
-  isRecurring: boolean;
+  customFields?: Record<string, any>;
+  isRecurring?: boolean;
   recurringInterval?: 'monthly' | 'quarterly' | 'yearly';
   currentApprovalStepIndex: number;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   approvalsHistory: {
     stepName: string;
     approverName: string;
@@ -156,21 +160,27 @@ export type RFQStatus = 'draft' | 'published' | 'evaluation' | 'awarded' | 'canc
 
 export interface RFQItem {
   id: string;
+  itemId?: string;
   description: string;
   quantity: number;
-  unit: string;
-  specifications: string;
+  unit?: string;
+  specifications?: string;
 }
 
 export interface RFQ {
   id: string;
   rfqNumber: string;
   title: string;
+  description?: string;
   procurementRequestId?: string;
   items: RFQItem[];
+  lineItems?: RFQItem[];
   closingDate: string;
   deliveryLocation: string;
   invitedVendorIds: string[];
+  invitedVendors?: string[];
+  estimatedBudget?: number;
+  bidsCount?: number;
   status: RFQStatus;
   criteriaWeights: {
     price: number; // e.g. 40
@@ -182,9 +192,13 @@ export interface RFQ {
 }
 
 export interface BidItem {
-  rfqItemId: string;
+  rfqItemId?: string;
+  itemId?: string;
+  description?: string;
+  quantity?: number;
   unitPrice: number;
   totalPrice: number;
+  lineTotal?: number;
   notes?: string;
 }
 
@@ -195,22 +209,26 @@ export interface Bid {
   vendorName: string;
   totalAmount: number;
   deliveryDays: number;
-  warrantyPeriod: string;
-  validityDays: number;
-  complianceChecked: boolean;
+  leadTimeDays?: number;
+  warrantyPeriod?: string;
+  validityDays?: number;
+  validUntil?: string;
+  complianceChecked?: boolean;
   technicalScore?: number;
   financialScore?: number;
   totalWeightedScore?: number;
   status: 'submitted' | 'under_evaluation' | 'shortlisted' | 'rejected' | 'awarded';
   items: BidItem[];
+  lineItems?: BidItem[];
   submittedAt: string;
   comments?: string;
+  notes?: string;
 }
 
 export interface VendorDocument {
   id: string;
   name: string;
-  documentType: 'tax_clearance' | 'business_reg' | 'insurance' | 'iso_cert' | 'bank_ref';
+  documentType: 'tax_clearance' | 'business_reg' | 'business_license' | 'insurance' | 'iso_cert' | 'bank_ref';
   expiryDate: string;
   isVerified: boolean;
   status: 'valid' | 'expiring_soon' | 'expired';
@@ -243,18 +261,23 @@ export type POStatus =
   | 'draft'
   | 'issued'
   | 'confirmed_by_vendor'
+  | 'acknowledged'
   | 'in_transit'
   | 'partially_received'
   | 'fully_received'
+  | 'received'
   | 'cancelled';
 
 export interface POItem {
   id: string;
+  itemId?: string;
   description: string;
   quantityOrdered: number;
+  quantity?: number;
   quantityReceived: number;
   unitPrice: number;
   totalPrice: number;
+  lineTotal?: number;
 }
 
 export interface PurchaseOrder {
@@ -266,6 +289,7 @@ export interface PurchaseOrder {
   vendorName: string;
   vendorEmail: string;
   items: POItem[];
+  lineItems?: POItem[];
   subtotal: number;
   taxAmount: number;
   shippingAmount: number;
@@ -273,8 +297,13 @@ export interface PurchaseOrder {
   deliveryTerms: string;
   paymentTerms: string;
   expectedDeliveryDate: string;
+  estimatedDeliveryDate?: string;
+  vendorAcknowledgedAt?: string;
+  dispatchedAt?: string;
   deliveryLocationId?: string;
   deliveryAddress: string;
+  trackingNumber?: string;
+  carrier?: string;
   status: POStatus;
   issuedAt: string;
   notes?: string;
@@ -335,18 +364,22 @@ export interface StockMovement {
 export type InvoiceStatus = 'pending_review' | 'matched' | 'exception' | 'approved' | 'paid';
 
 export interface InvoiceItem {
-  id: string;
+  id?: string;
+  itemId?: string;
   description: string;
   quantityBilled: number;
+  quantity?: number;
   unitPrice: number;
   totalPrice: number;
+  lineTotal?: number;
 }
 
 export interface Invoice {
   id: string;
   invoiceNumber: string;
-  vendorInvoiceNumber: string;
-  purchaseOrderId: string;
+  vendorInvoiceNumber?: string;
+  purchaseOrderId?: string;
+  poId?: string;
   poNumber: string;
   grnId?: string;
   grnNumber?: string;
@@ -355,7 +388,8 @@ export interface Invoice {
   subtotal: number;
   taxAmount: number;
   totalAmount: number;
-  issueDate: string;
+  issueDate?: string;
+  receivedDate?: string;
   dueDate: string;
   status: InvoiceStatus;
   threeWayMatch: {
@@ -366,6 +400,7 @@ export interface Invoice {
     discrepancyNote?: string;
   };
   items: InvoiceItem[];
+  lineItems?: InvoiceItem[];
 }
 
 export interface PaymentRecord {

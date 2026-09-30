@@ -143,40 +143,40 @@ export const AIAssistantModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-2xl h-[620px] max-h-[90vh] rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-2xl h-[620px] max-h-[90vh] rounded-2xl bg-[#082117] border border-[#143e2f] shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="p-4 sm:px-6 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        <div className="p-4 sm:px-6 border-b border-[#143e2f] bg-[#061e15] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-indigo-500 to-sky-400 text-white shadow-md shadow-indigo-500/20">
+            <div className="p-2 rounded-xl bg-[#092b1f] border border-[#d4af37]/40 text-[#d4af37] shadow-md">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-white">Procura Intelligence Assistant</h3>
-                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 text-[10px] font-semibold flex items-center gap-1">
+                <h3 className="text-sm font-bold text-white">Procura Intelligence Advisor</h3>
+                <span className="px-2 py-0.5 rounded-full bg-[#0d3b2b] text-[#d4af37] text-[10px] font-semibold flex items-center gap-1 border border-[#d4af37]/30">
                   <ShieldCheck className="w-3 h-3" /> RBAC Enforced
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Context-grounded AI procurement intelligence</p>
+              <p className="text-[11px] text-slate-400">Context-grounded operational procurement advisor</p>
             </div>
           </div>
           <button
             onClick={() => setIsAiModalOpen(false)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#0c2d20] transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Quick prompt pills */}
-        <div className="px-4 py-2 bg-slate-950/30 border-b border-slate-800/80 flex items-center gap-2 overflow-x-auto text-[11px]">
-          <span className="text-slate-500 flex-shrink-0">Try asking:</span>
+        <div className="px-4 py-2 bg-[#051710] border-b border-[#143e2f] flex items-center gap-2 overflow-x-auto text-[11px]">
+          <span className="text-slate-400 flex-shrink-0">Try asking:</span>
           {quickPrompts.map((p, idx) => (
             <button
               key={idx}
               onClick={() => handleSend(p)}
-              className="flex-shrink-0 px-2.5 py-1 rounded-full bg-slate-800/90 hover:bg-indigo-600/30 hover:text-indigo-300 text-slate-300 border border-slate-700/60 transition"
+              className="flex-shrink-0 px-2.5 py-1 rounded-full bg-[#082117] hover:bg-[#0c2d20] hover:text-[#d4af37] text-slate-300 border border-[#143e2f] transition"
             >
               {p}
             </button>
@@ -192,8 +192,8 @@ export const AIAssistantModal: React.FC = () => {
                 <div
                   className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold ${
                     isMe
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-800 text-sky-400 border border-slate-700'
+                      ? 'bg-[#d4af37] text-[#051b14]'
+                      : 'bg-[#092b1f] text-[#d4af37] border border-[#143e2f]'
                   }`}
                 >
                   {isMe ? <UserIcon className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
@@ -201,14 +201,14 @@ export const AIAssistantModal: React.FC = () => {
                 <div
                   className={`max-w-[80%] rounded-2xl p-4 text-xs leading-relaxed ${
                     isMe
-                      ? 'bg-indigo-600 text-white rounded-tr-none'
-                      : 'bg-slate-800/90 text-slate-200 border border-slate-700/60 rounded-tl-none whitespace-pre-line'
+                      ? 'bg-[#d4af37] text-[#051b14] font-semibold rounded-tr-none'
+                      : 'bg-[#051710] text-slate-200 border border-[#143e2f] rounded-tl-none whitespace-pre-line'
                   }`}
                 >
                   {m.text}
                   <div
                     className={`text-[9px] mt-1.5 ${
-                      isMe ? 'text-indigo-200 text-right' : 'text-slate-400'
+                      isMe ? 'text-[#051b14]/70 text-right' : 'text-slate-500'
                     }`}
                   >
                     {m.timestamp}
@@ -219,11 +219,11 @@ export const AIAssistantModal: React.FC = () => {
           })}
           {loading && (
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-sky-400 border border-slate-700">
+              <div className="w-8 h-8 rounded-xl bg-[#092b1f] flex items-center justify-center text-[#d4af37] border border-[#143e2f]">
                 <Bot className="w-4 h-4 animate-spin" />
               </div>
-              <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl rounded-tl-none p-3.5 text-xs text-slate-400 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+              <div className="bg-[#051710] border border-[#143e2f] rounded-2xl rounded-tl-none p-3.5 text-xs text-slate-400 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-ping" />
                 Analyzing procurement records and budget rules...
               </div>
             </div>
@@ -231,7 +231,7 @@ export const AIAssistantModal: React.FC = () => {
         </div>
 
         {/* Input Bar */}
-        <div className="p-3 sm:p-4 bg-slate-950 border-t border-slate-800">
+        <div className="p-3 sm:p-4 bg-[#061e15] border-t border-[#143e2f]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -244,12 +244,12 @@ export const AIAssistantModal: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about spending, suppliers, approvals, or exceptions..."
-              className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="flex-1 bg-[#051710] border border-[#143e2f] rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#d4af37]"
             />
             <button
               type="submit"
               disabled={!input.trim()}
-              className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white transition"
+              className="p-2.5 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] disabled:opacity-40 text-[#051b14] font-bold transition flex items-center justify-center cursor-pointer shadow"
             >
               <Send className="w-4 h-4" />
             </button>

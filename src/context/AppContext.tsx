@@ -20,6 +20,7 @@ import {
   ProcurementRequest,
   PurchaseOrder,
   RequestItem,
+  RequestStatus,
   RFQ,
   StockMovement,
   SupportedLanguage,
@@ -53,6 +54,8 @@ import { getTranslation } from '../utils/translations';
 export type ActiveView =
   | 'landing'
   | 'onboarding'
+  | 'auth'
+  | 'vendor_portal'
   | 'dashboard'
   | 'requests'
   | 'approvals'
@@ -79,6 +82,31 @@ interface AppContextType {
   orgConfig: OrgConfig;
   updateOrgConfig: (updates: Partial<OrgConfig>) => void;
   loadPreset: (presetKey: 'enterprise' | 'smb' | 'individual' | 'retail') => void;
+
+  // Auth State & Actions
+  isAuthenticated: boolean;
+  login: (email: string, role?: UserRole) => boolean;
+  signup: (
+    name: string,
+    email: string,
+    role: UserRole,
+    orgName?: string,
+    isVendor?: boolean,
+    vendorDetails?: {
+      phone?: string;
+      city?: string;
+      category?: string;
+      bankName?: string;
+      accountNumber?: string;
+    }
+  ) => void;
+  logout: () => void;
+  resetPassword: (email: string, newPassword?: string) => boolean;
+
+  // Vendor Portal Actions
+  submitVendorBid: (rfqId: string, amount: number, leadTimeDays: number, notes: string) => void;
+  acknowledgePO: (poId: string, trackingNumber?: string, estimatedDeliveryDate?: string) => void;
+  submitVendorInvoice: (poId: string, invoiceNumber: string, amount: number, dueDate: string) => void;
   
   // Collections
   requests: ProcurementRequest[];
@@ -101,7 +129,12 @@ interface AppContextType {
   users: User[];
 
   // Actions
-  createRequest: (data: Omit<ProcurementRequest, 'id' | 'requestNumber' | 'createdAt' | 'updatedAt' | 'approvalsHistory' | 'currentApprovalStepIndex'>) => void;
+  createRequest: (
+    data: Omit<
+      ProcurementRequest,
+      'id' | 'requestNumber' | 'createdAt' | 'updatedAt' | 'approvalsHistory' | 'currentApprovalStepIndex' | 'status'
+    > & { status?: RequestStatus }
+  ) => void;
   updateRequestStatus: (id: string, status: ProcurementRequest['status']) => void;
   approveRequest: (id: string, comment?: string) => void;
   rejectRequest: (id: string, reason?: string) => void;
@@ -119,6 +152,7 @@ interface AppContextType {
   processPayment: (data: Omit<PaymentRecord, 'id' | 'paymentNumber' | 'paymentDate' | 'status'>) => void;
 
   addVendor: (vendor: Omit<Vendor, 'id' | 'rating' | 'onTimeDeliveryRate' | 'qualityScore' | 'completedOrdersCount' | 'totalSpend'>) => void;
+  updateVendor: (id: string, updates: Partial<Vendor>) => void;
   dismissException: (id: string) => void;
   markNotificationAsRead: (id: string) => void;
   markAllNotificationsAsRead: () => void;
@@ -141,6 +175,10 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeView, setActiveView] = useState<ActiveView>('landing');
   const [currentUser, setCurrentUser] = useState<User>(sampleUsers[0]);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    const saved = localStorage.getItem('procura_auth');
+    return saved !== null ? saved === 'true' : true;
+  });
   const [orgConfig, setOrgConfig] = useState<OrgConfig>(() => {
     const saved = localStorage.getItem('procura_org_config');
     return saved ? JSON.parse(saved) : initialOrgConfig;
@@ -233,13 +271,256 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     if (matchedUser) {
       setCurrentUser(matchedUser);
     } else {
-      setCurrentUser({
+      const newUser = {
         id: `u_${role}`,
-        name: `User (${role})`,
+        name: `User (${role.replace('_', ' ')})`,
         email: `${role}@apexglobal.com`,
         role,
-      });
+      };
+      setCurrentUser(newUser);
     }
+    if (role === 'vendor') {
+      setActiveView('vendor_portal');
+    } else if (activeView === 'vendor_portal') {
+      setActiveView('dashboard');
+    }
+  };
+
+  const login = (email: string, role?: UserRole): boolean => {
+    let target = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    if (!target && role) {
+      target = users.find((u) => u.role === role);
+    }
+    if (!target) {
+      target = {
+        id: `u_${Date.now()}`,
+        name: email.split('@')[0],
+        email,
+        role: role || 'owner',
+      };
+      setUsers((prev) => [...prev, target!]);
+    }
+    setCurrentUser(target);
+    setIsAuthenticated(true);
+    localStorage.setItem('procura_auth', 'true');
+    if (target.role === 'vendor') {
+      setActiveView('vendor_portal');
+    } else {
+      setActiveView('dashboard');
+    }
+    addAudit('USER_LOGIN', 'User', target.id, `${target.name} logged into Procura.`);
+    return true;
+  };
+
+  const signup = (
+    name: string,
+    email: string,
+    role: UserRole,
+    orgName?: string,
+    isVendor?: boolean,
+    vendorDetails?: {
+      phone?: string;
+      city?: string;
+      category?: string;
+      bankName?: string;
+      accountNumber?: string;
+    }
+  ) => {
+    const newUser: User = {
+      id: `u_${Date.now()}`,
+      name,
+      email,
+      role: isVendor ? 'vendor' : role,
+    };
+    setUsers((prev) => [...prev, newUser]);
+    setCurrentUser(newUser);
+    setIsAuthenticated(true);
+    localStorage.setItem('procura_auth', 'true');
+
+    if (isVendor) {
+      const newVendor: Vendor = {
+        id: `v_${Date.now()}`,
+        companyName: orgName || `${name} Supplies & Logistics Ltd`,
+        contactPerson: name,
+        email,
+        phone: vendorDetails?.phone || '+1 (555) 019-2834',
+        categories: vendorDetails?.category ? [vendorDetails.category] : ['General Supplies', 'Technology & Services'],
+        city: vendorDetails?.city || 'Metropolitan Area',
+        rating: 5.0,
+        onTimeDeliveryRate: 100,
+        qualityScore: 100,
+        complianceStatus: 'verified',
+        riskLevel: 'low',
+        completedOrdersCount: 0,
+        totalSpend: 0,
+        documents: [
+          {
+            id: `doc_${Date.now()}`,
+            name: 'Taxpayer Clearance & Registration',
+            documentType: 'tax_clearance',
+            expiryDate: '2027-12-31',
+            isVerified: true,
+            status: 'valid',
+          },
+          {
+            id: `doc_cac_${Date.now()}`,
+            name: 'Certificate of Commercial Incorporation',
+            documentType: 'business_license',
+            expiryDate: '2028-06-30',
+            isVerified: true,
+            status: 'valid',
+          },
+        ],
+        bankDetails: {
+          bankName: vendorDetails?.bankName || 'First Commercial Bank',
+          accountNumber: vendorDetails?.accountNumber || '•••• 4521',
+          accountName: orgName || name,
+        },
+      };
+      setVendors((prev) => [newVendor, ...prev]);
+      setActiveView('vendor_portal');
+    } else {
+      if (orgName) {
+        setOrgConfig((prev) => ({ ...prev, name: orgName }));
+      }
+      setActiveView('dashboard');
+    }
+    addAudit('USER_SIGNUP', 'User', newUser.id, `New user ${name} registered (${isVendor ? 'Vendor' : role}).`);
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.setItem('procura_auth', 'false');
+    setActiveView('auth');
+    addAudit('USER_LOGOUT', 'User', currentUser.id, `${currentUser.name} signed out.`);
+  };
+
+  const resetPassword = (email: string, _newPassword?: string) => {
+    addAudit('PASSWORD_RESET', 'User', email, `Password reset initiated for ${email}`);
+    return true;
+  };
+
+  const submitVendorBid = (rfqId: string, amount: number, leadTimeDays: number, notes: string) => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId);
+    if (!targetRFQ) return;
+
+    const vendorProfile = vendors.find((v) => v.email === currentUser.email) || vendors[0];
+    const rfqItems = targetRFQ.items || targetRFQ.lineItems || [];
+    const totalQty = Math.max(1, rfqItems.reduce((acc, i) => acc + (i.quantity || 1), 0));
+    const newBid: Bid = {
+      id: `bid_${Date.now()}`,
+      rfqId,
+      vendorId: vendorProfile.id,
+      vendorName: vendorProfile.companyName,
+      totalAmount: amount,
+      deliveryDays: leadTimeDays,
+      leadTimeDays,
+      validUntil: targetRFQ.closingDate,
+      submittedAt: new Date().toISOString(),
+      status: 'submitted',
+      items: rfqItems.map((item) => ({
+        rfqItemId: item.id || item.itemId || '',
+        itemId: item.id || item.itemId,
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: amount / totalQty,
+        totalPrice: amount,
+        lineTotal: amount,
+      })),
+      lineItems: rfqItems.map((item) => ({
+        rfqItemId: item.id || item.itemId || '',
+        itemId: item.id || item.itemId,
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: amount / totalQty,
+        totalPrice: amount,
+        lineTotal: amount,
+      })),
+      notes,
+    };
+    setBids((prev) => [newBid, ...prev]);
+    setRfqs((prev) =>
+      prev.map((r) => (r.id === rfqId ? { ...r, bidsCount: (r.bidsCount || 0) + 1 } : r))
+    );
+    addAudit('VENDOR_BID_SUBMITTED', 'RFQ', rfqId, `${vendorProfile.companyName} submitted a quote of $${amount}.`);
+  };
+
+  const acknowledgePO = (poId: string, trackingNumber?: string, estimatedDeliveryDate?: string) => {
+    setPurchaseOrders((prev) =>
+      prev.map((po) =>
+        po.id === poId
+          ? {
+              ...po,
+              status: 'confirmed_by_vendor',
+              vendorAcknowledgedAt: new Date().toISOString(),
+              dispatchedAt: new Date().toISOString(),
+              trackingNumber: trackingNumber || `TRK-${Date.now().toString().slice(-6)}`,
+              expectedDeliveryDate: estimatedDeliveryDate || po.expectedDeliveryDate,
+              estimatedDeliveryDate: estimatedDeliveryDate || po.estimatedDeliveryDate || po.expectedDeliveryDate,
+            }
+          : po
+      )
+    );
+    addAudit('PO_ACKNOWLEDGED', 'PurchaseOrder', poId, `Vendor acknowledged order ${poId}.`);
+  };
+
+  const submitVendorInvoice = (poId: string, invoiceNumber: string, amount: number, dueDate: string) => {
+    const po = purchaseOrders.find((p) => p.id === poId);
+    const vendorProfile = vendors.find((v) => v.id === po?.vendorId) || vendors[0];
+    const poItems = po ? (po.items || po.lineItems || []) : [];
+    const newInv: Invoice = {
+      id: `inv_${Date.now()}`,
+      invoiceNumber,
+      purchaseOrderId: poId,
+      poId,
+      poNumber: po ? po.poNumber : 'PO-DIRECT',
+      vendorId: vendorProfile.id,
+      vendorName: vendorProfile.companyName,
+      issueDate: new Date().toISOString().split('T')[0],
+      receivedDate: new Date().toISOString().split('T')[0],
+      dueDate,
+      subtotal: Math.round(amount / 1.075),
+      taxAmount: Math.round(amount - amount / 1.075),
+      totalAmount: amount,
+      status: 'pending_review',
+      threeWayMatch: {
+        isMatched: false,
+        quantityMatch: false,
+        priceMatch: false,
+        hasGrn: false,
+        discrepancyNote: 'Pending receiving confirmation & 3-way matching audit',
+      },
+      items: poItems.map((li) => {
+        const qty = li.quantityOrdered ?? li.quantity ?? 1;
+        const total = li.totalPrice ?? li.lineTotal ?? (li.unitPrice * qty);
+        return {
+          id: li.id,
+          itemId: li.itemId || li.id,
+          description: li.description,
+          quantityBilled: qty,
+          quantity: qty,
+          unitPrice: li.unitPrice,
+          totalPrice: total,
+          lineTotal: total,
+        };
+      }),
+      lineItems: poItems.map((li) => {
+        const qty = li.quantityOrdered ?? li.quantity ?? 1;
+        const total = li.totalPrice ?? li.lineTotal ?? (li.unitPrice * qty);
+        return {
+          id: li.id,
+          itemId: li.itemId || li.id,
+          description: li.description,
+          quantityBilled: qty,
+          quantity: qty,
+          unitPrice: li.unitPrice,
+          totalPrice: total,
+          lineTotal: total,
+        };
+      }),
+    };
+    setInvoices((prev) => [newInv, ...prev]);
+    addAudit('VENDOR_INVOICE_SUBMITTED', 'Invoice', newInv.id, `${vendorProfile.companyName} submitted invoice ${invoiceNumber} for $${amount}.`);
   };
 
   const loadPreset = (presetKey: 'enterprise' | 'smb' | 'individual' | 'retail') => {
@@ -321,10 +602,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Business Actions
   const createRequest = (
-    data: Omit<ProcurementRequest, 'id' | 'requestNumber' | 'createdAt' | 'updatedAt' | 'approvalsHistory' | 'currentApprovalStepIndex'>
+    data: Omit<ProcurementRequest, 'id' | 'requestNumber' | 'createdAt' | 'updatedAt' | 'approvalsHistory' | 'currentApprovalStepIndex' | 'status'> & { status?: RequestStatus }
   ) => {
     const num = `REQ-2026-${String(requests.length + 101).padStart(3, '0')}`;
     const newReq: ProcurementRequest = {
+      status: data.status || 'pending_approval',
+      requiredDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
       ...data,
       id: `req_${Date.now()}`,
       requestNumber: num,
@@ -787,6 +1070,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     addAudit('VENDOR_ADDED', 'Vendor', newVendor.id, `Enrolled supplier: ${newVendor.companyName}`);
   };
 
+  const updateVendor = (id: string, updates: Partial<Vendor>) => {
+    setVendors((prev) =>
+      prev.map((v) => (v.id === id ? { ...v, ...updates } : v))
+    );
+    addAudit('VENDOR_UPDATED', 'Vendor', id, 'Vendor account profile & banking details updated.');
+  };
+
   const dismissException = (id: string) => {
     setExceptions((prev) => prev.map((ex) => (ex.id === id ? { ...ex, resolved: true } : ex)));
   };
@@ -810,6 +1100,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         orgConfig,
         updateOrgConfig,
         loadPreset,
+
+        isAuthenticated,
+        login,
+        signup,
+        logout,
+        resetPassword,
+        submitVendorBid,
+        acknowledgePO,
+        submitVendorInvoice,
 
         requests,
         rfqs,
@@ -848,6 +1147,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         processPayment,
 
         addVendor,
+        updateVendor,
         dismissException,
         markNotificationAsRead,
         markAllNotificationsAsRead,

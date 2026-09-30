@@ -266,7 +266,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                   {selectedInvoice.status !== 'paid' && (
                     <button
                       onClick={() => setPayModalInvoice(selectedInvoice)}
-                      className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2"
+                      className="w-full py-2.5 px-4 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <CreditCard className="w-4 h-4" />
                       <span>Authorize & Release Payment</span>

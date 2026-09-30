@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export const LoadingSplash: React.FC<{ onFinish: () => void; text?: string }> = ({
   onFinish,
-  text = 'Initializing Procura Adaptive Procurement Core...',
+  text = 'Initializing Procura Enterprise Procurement Core...',
 }) => {
   const [progress, setProgress] = useState(15);
 
@@ -22,29 +22,28 @@ export const LoadingSplash: React.FC<{ onFinish: () => void; text?: string }> = 
   }, [onFinish]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4 select-none">
+    <div className="fixed inset-0 z-50 bg-[#04140e] flex flex-col items-center justify-center p-4 select-none">
       <div className="relative mb-6">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 via-sky-500 to-teal-400 flex items-center justify-center text-white text-3xl font-black shadow-2xl shadow-indigo-500/30 animate-pulse">
+        <div className="w-16 h-16 rounded-2xl bg-[#092b1f] border-2 border-[#d4af37] flex items-center justify-center text-[#d4af37] text-3xl font-black shadow-2xl shadow-[#d4af37]/20">
           P
         </div>
-        <div className="absolute -inset-2 bg-gradient-to-tr from-indigo-500/20 to-sky-400/20 rounded-3xl blur-xl -z-10" />
       </div>
 
       <div className="text-center space-y-1 mb-6">
         <h1 className="text-2xl font-extrabold text-white tracking-tight">Procura</h1>
-        <p className="text-xs text-indigo-400 font-semibold uppercase tracking-widest text-[11px]">
-          Universal Procurement OS
+        <p className="text-xs text-[#d4af37] font-semibold uppercase tracking-widest text-[11px]">
+          Smart Procurement Operating System
         </p>
       </div>
 
-      <div className="w-64 max-w-[80vw] h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+      <div className="w-64 max-w-[80vw] h-1.5 bg-[#082117] rounded-full overflow-hidden border border-[#143e2f]">
         <div
-          className="h-full bg-gradient-to-r from-indigo-500 via-sky-400 to-teal-400 transition-all duration-300 rounded-full"
+          className="h-full bg-[#d4af37] transition-all duration-300 rounded-full"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <div className="text-[11px] text-slate-500 mt-4 font-mono">{text}</div>
+      <div className="text-[11px] text-slate-400 mt-4 font-mono">{text}</div>
     </div>
   );
 };

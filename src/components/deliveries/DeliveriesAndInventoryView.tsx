@@ -65,9 +65,9 @@ export const DeliveriesAndInventoryView: React.FC<{
     const matchedLoc = locations.find((l) => l.id === locationId) || locations[0];
 
     const grnItems = selectedPO.items.map((it, idx) => ({
-      poItemId: it.id,
+      poItemId: it.id || `poi_${idx}`,
       description: it.description,
-      quantityOrdered: it.quantityOrdered,
+      quantityOrdered: it.quantityOrdered ?? 1,
       quantityReceived: receivedQtyInput,
       quantityDamaged: damagedQtyInput,
       quantityMissing: missingQtyInput,

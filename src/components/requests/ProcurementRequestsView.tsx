@@ -443,7 +443,7 @@ export const ProcurementRequestsView: React.FC<{
                         totalAmount: subtotal + tax + 150,
                         deliveryTerms: 'DAP (Delivered at Place)',
                         paymentTerms: 'Net 30 Days',
-                        expectedDeliveryDate: selectedReq.requiredDate,
+                        expectedDeliveryDate: selectedReq.requiredDate || new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
                         deliveryAddress: selectedReq.locationName || 'HQ Logistics Dock',
                         notes: `Generated from ${selectedReq.requestNumber}`,
                       });

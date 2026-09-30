@@ -79,24 +79,24 @@ npx cap open android
 # In Android Studio: Click Build > Build Bundle(s) / APK(s) > Build APK(s)`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="relative w-full max-w-2xl rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-6 sm:p-8 text-left my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 overflow-y-auto">
+      <div className="relative w-full max-w-2xl rounded-2xl bg-[#082117] border border-[#143e2f] shadow-2xl p-6 sm:p-8 text-left my-8">
         <button
           onClick={() => setIsAPKModalOpen(false)}
-          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition"
+          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-[#0c2f21] transition cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5 text-[#d4af37]" />
         </button>
 
         {/* Modal Header */}
         <div className="flex items-center gap-3.5 mb-6">
-          <div className="p-3 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white shadow-lg shadow-indigo-500/20">
+          <div className="p-3 rounded-2xl bg-[#092b1f] border border-[#d4af37]/40 text-[#d4af37] shadow-lg">
             <Smartphone className="w-7 h-7" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-white">Download Code, GitHub & Mobile APK</h2>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
+              <h2 className="text-xl font-bold text-white">Project Export & Mobile APK Center</h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#0d3b2b] text-[#d4af37] border border-[#d4af37]/30 text-[11px] font-bold">
                 Capstone Ready
               </span>
             </div>
@@ -107,12 +107,12 @@ npx cap open android
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800 mb-6">
+        <div className="flex gap-2 p-1 bg-[#051710] rounded-xl border border-[#143e2f] mb-6">
           <button
             onClick={() => setActiveTab('code_github')}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition ${
+            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer ${
               activeTab === 'code_github'
-                ? 'bg-indigo-600 text-white shadow'
+                ? 'bg-[#d4af37] text-[#051b14] shadow'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -121,9 +121,9 @@ npx cap open android
           </button>
           <button
             onClick={() => setActiveTab('instant_apk')}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition ${
+            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer ${
               activeTab === 'instant_apk'
-                ? 'bg-indigo-600 text-white shadow'
+                ? 'bg-[#d4af37] text-[#051b14] shadow'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -132,9 +132,9 @@ npx cap open android
           </button>
           <button
             onClick={() => setActiveTab('capacitor')}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition ${
+            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer ${
               activeTab === 'capacitor'
-                ? 'bg-indigo-600 text-white shadow'
+                ? 'bg-[#d4af37] text-[#051b14] shadow'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -159,13 +159,16 @@ npx cap open android
                   </p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <button
-                    onClick={handleDownloadZip}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition"
+                  <a
+                    href={downloadZipUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download="procura-smart-procurement-system.zip"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
                     <span>Download .ZIP</span>
-                  </button>
+                  </a>
                   <a
                     href={downloadZipUrl}
                     target="_blank"
@@ -179,10 +182,21 @@ npx cap open android
               </div>
 
               {/* Direct Download URL Callout (For browsers / iframes that restrict in-frame downloads) */}
-              <div className="mt-3 pt-3 border-t border-indigo-900/40">
-                <div className="flex items-center justify-between gap-2 mb-1.5">
+              <div className="mt-3 pt-3 border-t border-indigo-900/40 space-y-2">
+                <div className="p-3 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200">
+                  <p className="font-semibold text-white mb-1">💡 If clicking Download does not start inside AI Studio:</p>
+                  <p className="text-[11px] text-slate-300">
+                    The AI Studio preview runs inside a sandboxed iframe that blocks file downloads. To download immediately, either:
+                  </p>
+                  <ol className="list-decimal list-inside text-[11px] text-indigo-300 mt-1 space-y-0.5">
+                    <li>Copy the link below and open it in a <strong>new browser tab</strong>.</li>
+                    <li>Or click <strong>"Open App in New Tab"</strong> in the top-right corner of AI Studio, then click Download.</li>
+                  </ol>
+                </div>
+
+                <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-semibold text-indigo-300">
-                    Direct Browser Link (Paste in new browser tab if download doesn't trigger):
+                    Direct Download URL:
                   </span>
                   <button
                     onClick={() => copyCode(downloadZipUrl, 'zip-url')}

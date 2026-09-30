@@ -264,7 +264,7 @@ export const RFQWorkspaceView: React.FC = () => {
                               ) : (
                                 <button
                                   onClick={() => awardBid(activeRfq.id, bid.id)}
-                                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-md transition"
+                                  className="px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs shadow-md transition cursor-pointer"
                                 >
                                   Award & Issue PO
                                 </button>

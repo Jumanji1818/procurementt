@@ -1,20 +1,47 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
-    --bg-main: #04140e;
+  /* DARK — green + gold only */
+  :root,
+  [data-theme="dark"] {
+    --bg: #04140e;
+    --bg-elevated: #061e15;
     --bg-card: #082117;
-    --bg-card-hover: #0c2d20;
-    --border-main: #143e2f;
-    --color-gold: #d4af37;
-    --color-gold-light: #f3e5ab;
-    --color-gold-dark: #b58d22;
+    --bg-hover: #0c2d20;
+    --border: #143e2f;
+    --text: #f1f5f3;
+    --text-muted: #94a3b8;
+    --accent: #d4af37;
+    --accent-hover: #c49f2b;
+    --accent-text: #051b14;
+    --success: #34d399;
+    --danger: #f87171;
+    --warning: #fbbf24;
   }
 
-  body {
-    background-color: #04140e;
-    color: #f1f5f3;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* LIGHT — same accent language, light surfaces */
+  [data-theme="light"] {
+    --bg: #f4f7f5;
+    --bg-elevated: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #eef5f1;
+    --border: #d5e3db;
+    --text: #0f1f18;
+    --text-muted: #5b6b63;
+    --accent: #9a7b1a;
+    --accent-hover: #7d6314;
+    --accent-text: #ffffff;
+    --success: #059669;
+    --danger: #dc2626;
+    --warning: #d97706;
+  }
+
+  html, body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   code, pre, .font-mono {
@@ -22,24 +49,53 @@
   }
 }
 
-/* Custom Prestige Dark Green scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #04140e;
-}
-::-webkit-scrollbar-thumb {
-  background: #143e2f;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+/* Prevent horizontal slide on mobile */
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
-/* Smooth transitions */
-* {
-  -webkit-tap-highlight-color: transparent;
+/* Straight, proportional buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-center: center;
+  gap: 0.4rem;
+  height: 2.25rem;
+  padding: 0 0.9rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover { background: var(--bg-hover); }
+.btn-danger {
+  background: color-mix(in srgb, var(--danger) 20%, transparent);
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
 }
 
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+* { -webkit-tap-highlight-color: transparent; }

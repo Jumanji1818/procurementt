@@ -147,35 +147,40 @@ export const PurchaseOrdersView: React.FC<{
         {filteredPOs.map((po) => (
           <div
             key={po.id}
-            className="p-5 rounded-2xl border border-slate-800 bg-slate-900/90 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="p-5 rounded-xl border border-[#143e2f] bg-[#082117] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="font-mono text-xs font-bold text-white">{po.poNumber}</span>
                 <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                     po.status === 'fully_received'
-                      ? 'bg-emerald-500/20 text-emerald-400'
+                      ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-600/40'
                       : po.status === 'in_transit'
-                      ? 'bg-sky-500/20 text-sky-400'
-                      : 'bg-amber-500/20 text-amber-400'
+                      ? 'bg-[#092b1f] text-[#d4af37] border border-[#d4af37]/40'
+                      : 'bg-[#051710] text-amber-400 border border-[#143e2f]'
                   }`}
                 >
                   {po.status.replace('_', ' ').toUpperCase()}
                 </span>
+                {po.trackingNumber && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#092b1f] text-[#d4af37] border border-[#d4af37]/40">
+                    📦 Tracking: {po.trackingNumber}
+                  </span>
+                )}
                 <span className="text-[11px] text-slate-400">• Issued: {po.issuedAt.split('T')[0]}</span>
               </div>
 
               <div className="text-sm font-bold text-white">{po.vendorName}</div>
-              <div className="text-xs text-slate-400">
+              <div className="text-xs text-slate-300">
                 {po.items.map((i) => `${i.quantityOrdered}x ${i.description}`).join(' • ')}
               </div>
-              <div className="text-[11px] text-slate-500">
+              <div className="text-[11px] text-slate-400">
                 Delivery Target: {po.expectedDeliveryDate} • Destination: {po.deliveryAddress}
               </div>
             </div>
 
-            <div className="flex items-center gap-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
+            <div className="flex items-center gap-4 border-t md:border-t-0 pt-3 md:pt-0 border-[#143e2f]">
               <div className="text-right">
                 <div className="text-base font-black text-white">{formatCurrency(po.totalAmount)}</div>
                 <span className="text-[10px] text-slate-400">Total Contract Value</span>
@@ -184,9 +189,9 @@ export const PurchaseOrdersView: React.FC<{
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setPrintModalPO(po)}
-                  className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 transition"
+                  className="px-3.5 py-2 rounded-md bg-[#051710] hover:bg-[#0c2d20] border border-[#143e2f] text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 >
-                  <Printer className="w-3.5 h-3.5 text-indigo-400" />
+                  <Printer className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>Print PO / PDF</span>
                 </button>
               </div>

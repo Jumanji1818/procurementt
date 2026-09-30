@@ -620,6 +620,31 @@ export const OnboardingWizard: React.FC = () => {
                   </select>
                 </div>
               </div>
+
+              <div className="p-4 rounded-lg bg-[#051710] border border-[#143e2f] space-y-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-white">
+                  <Users className="w-4 h-4 text-[#d4af37]" />
+                  <span>Interconnected Organization Accounts Ready to Communicate:</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-300">
+                  <div className="p-2 rounded bg-[#082117] border border-[#143e2f]">
+                    <span className="font-semibold text-white">1. Requisition Desk (Emmanuel)</span>
+                    <p className="text-[10px] text-slate-400">Submits itemized purchasing requests</p>
+                  </div>
+                  <div className="p-2 rounded bg-[#082117] border border-[#143e2f]">
+                    <span className="font-semibold text-white">2. Approvals Desk (Dr. Chen)</span>
+                    <p className="text-[10px] text-slate-400">Reviews & authorizes budget limits</p>
+                  </div>
+                  <div className="p-2 rounded bg-[#082117] border border-[#143e2f]">
+                    <span className="font-semibold text-white">3. Procurement Office (Sarah)</span>
+                    <p className="text-[10px] text-slate-400">Receives approved requests, RFQs & POs</p>
+                  </div>
+                  <div className="p-2 rounded bg-[#082117] border border-[#143e2f]">
+                    <span className="font-semibold text-white">4. Finance & 3-Way Match (Fatima)</span>
+                    <p className="text-[10px] text-slate-400">PO-GRN-Invoice reconciliation & payment</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -629,7 +654,7 @@ export const OnboardingWizard: React.FC = () => {
           {step > 1 ? (
             <button
               onClick={() => setStep(step - 1)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#143e2f] hover:bg-[#0c2d20] text-xs font-semibold text-slate-300 transition cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 rounded-md border border-[#143e2f] hover:bg-[#0c2d20] text-xs font-semibold text-slate-300 transition cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back</span>
@@ -641,7 +666,7 @@ export const OnboardingWizard: React.FC = () => {
           {step < totalSteps ? (
             <button
               onClick={() => setStep(step + 1)}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] text-xs font-bold transition shadow-md shadow-[#d4af37]/20 cursor-pointer"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] text-xs font-bold transition shadow-sm cursor-pointer"
             >
               <span>Continue</span>
               <ArrowRight className="w-4 h-4" />
@@ -649,7 +674,7 @@ export const OnboardingWizard: React.FC = () => {
           ) : (
             <button
               onClick={handleFinish}
-              className="flex items-center gap-2 px-7 py-3 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] text-xs font-bold text-[#051b14] shadow-lg shadow-[#d4af37]/20 transition transform hover:scale-[1.02] cursor-pointer"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-md bg-[#d4af37] hover:bg-[#c49f2b] text-xs font-bold text-[#051b14] shadow-sm transition cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
               <span>Launch Procura Command Center</span>

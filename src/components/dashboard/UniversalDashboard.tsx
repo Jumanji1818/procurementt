@@ -194,9 +194,9 @@ export const UniversalDashboard: React.FC<{
 
               <button
                 onClick={() => setActiveView('deliveries')}
-                className="p-3.5 rounded-xl bg-[#051710] hover:bg-[#d4af37] hover:text-[#051b14] text-slate-200 border border-[#143e2f] transition group flex items-center gap-3 cursor-pointer"
+                className="p-3.5 rounded-lg bg-[#051710] hover:bg-[#d4af37] hover:text-[#051b14] text-slate-200 border border-[#143e2f] transition group flex items-center gap-3 cursor-pointer"
               >
-                <div className="p-2 rounded-lg bg-[#092b1f] group-hover:bg-[#051b14] text-sky-400 group-hover:text-[#051b14] transition">
+                <div className="p-2 rounded-md bg-[#092b1f] group-hover:bg-[#051b14] text-emerald-400 group-hover:text-[#051b14] transition">
                   <Truck className="w-4 h-4" />
                 </div>
                 <div>
@@ -231,10 +231,10 @@ export const UniversalDashboard: React.FC<{
               <span className="text-[10px] text-emerald-300 mt-0.5 block">PO issued to vendor</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#082117] border border-[#143e2f]">
+            <div className="p-4 rounded-xl bg-[#082117] border border-[#143e2f]">
               <div className="text-slate-400 text-[11px] font-semibold">Items Arrived / Dispatched</div>
-              <div className="text-2xl font-black text-sky-400 mt-1">{pendingDeliveries.length}</div>
-              <span className="text-[10px] text-sky-300 mt-0.5 block">In transit or received</span>
+              <div className="text-2xl font-black text-emerald-400 mt-1">{pendingDeliveries.length}</div>
+              <span className="text-[10px] text-emerald-300 mt-0.5 block">In transit or received</span>
             </div>
           </div>
 
@@ -540,9 +540,9 @@ export const UniversalDashboard: React.FC<{
 
               <button
                 onClick={() => setActiveView('contracts')}
-                className="p-3.5 rounded-xl bg-[#051710] hover:bg-[#d4af37] hover:text-[#051b14] text-slate-200 border border-[#143e2f] transition group flex items-center gap-3 cursor-pointer"
+                className="p-3.5 rounded-lg bg-[#051710] hover:bg-[#d4af37] hover:text-[#051b14] text-slate-200 border border-[#143e2f] transition group flex items-center gap-3 cursor-pointer"
               >
-                <FileCheck2 className="w-4 h-4 text-sky-400 group-hover:text-[#051b14]" />
+                <FileCheck2 className="w-4 h-4 text-[#d4af37] group-hover:text-[#051b14]" />
                 <div className="text-left">
                   <div className="text-xs font-bold leading-tight">Contract Repository</div>
                   <div className="text-[10px] text-slate-400 group-hover:text-[#051b14]/80">Master vendor agreements</div>
@@ -553,25 +553,25 @@ export const UniversalDashboard: React.FC<{
 
           {/* Sourcing Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-2xl bg-[#082117] border border-[#143e2f]">
+            <div className="p-4 rounded-xl bg-[#082117] border border-[#143e2f]">
               <div className="text-slate-400 text-[11px] font-semibold">Active RFQ Tenders</div>
               <div className="text-2xl font-black text-white mt-1">{rfqs.length}</div>
               <span className="text-[10px] text-slate-400 mt-0.5 block">In bidding cycle</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#082117] border border-[#143e2f]">
+            <div className="p-4 rounded-xl bg-[#082117] border border-[#143e2f]">
               <div className="text-slate-400 text-[11px] font-semibold">Bids Received</div>
               <div className="text-2xl font-black text-[#d4af37] mt-1">{bids.length}</div>
               <span className="text-[10px] text-[#d4af37] mt-0.5 block">Sealed quotes submitted</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#082117] border border-[#143e2f]">
+            <div className="p-4 rounded-xl bg-[#082117] border border-[#143e2f]">
               <div className="text-slate-400 text-[11px] font-semibold">Purchase Orders in Transit</div>
-              <div className="text-2xl font-black text-sky-400 mt-1">{pendingDeliveries.length}</div>
-              <span className="text-[10px] text-sky-300 mt-0.5 block">Awaiting warehouse GRN</span>
+              <div className="text-2xl font-black text-emerald-400 mt-1">{pendingDeliveries.length}</div>
+              <span className="text-[10px] text-emerald-300 mt-0.5 block">Awaiting warehouse GRN</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#082117] border border-[#143e2f]">
+            <div className="p-4 rounded-xl bg-[#082117] border border-[#143e2f]">
               <div className="text-slate-400 text-[11px] font-semibold">Active PO Commitments</div>
               <div className="text-2xl font-black text-emerald-400 mt-1">{formatCurrency(totalCommitted)}</div>
               <span className="text-[10px] text-emerald-300 mt-0.5 block">Encumbered spend</span>
@@ -746,7 +746,7 @@ export const UniversalDashboard: React.FC<{
                             ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-600/40'
                             : inv.status === 'exception'
                             ? 'bg-rose-950/80 text-rose-300 border border-rose-600/40'
-                            : 'bg-sky-950/80 text-sky-400 border border-sky-600/40'
+                            : 'bg-[#092b1f] text-[#d4af37] border border-[#d4af37]/40'
                         }`}
                       >
                         {inv.status === 'paid' ? 'PAID' : inv.status === 'exception' ? 'MISMATCH EXCEPTION' : 'MATCHED'}
@@ -841,9 +841,9 @@ export const UniversalDashboard: React.FC<{
 
               <button
                 onClick={() => setActiveView('analytics')}
-                className="p-3 rounded-xl bg-[#051710] hover:bg-[#d4af37] hover:text-[#051b14] text-slate-200 text-left border border-[#143e2f] transition group cursor-pointer"
+                className="p-3 rounded-lg bg-[#051710] hover:bg-[#d4af37] hover:text-[#051b14] text-slate-200 text-left border border-[#143e2f] transition group cursor-pointer"
               >
-                <TrendingUp className="w-4 h-4 text-sky-400 group-hover:text-[#051b14] mb-1" />
+                <TrendingUp className="w-4 h-4 text-[#d4af37] group-hover:text-[#051b14] mb-1" />
                 <span className="text-xs font-bold block">Spend Analytics</span>
               </button>
             </div>

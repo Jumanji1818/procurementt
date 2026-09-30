@@ -28,9 +28,12 @@ import {
   User as UserIcon,
   LogOut,
   Store,
-  HelpCircle
+  HelpCircle,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { UserRole, CurrencyCode, SupportedLanguage } from '../../types';
+import { InterAccountRelay } from '../common/InterAccountRelay';
 
 export const AppShell: React.FC<{
   children: React.ReactNode;
@@ -61,6 +64,8 @@ export const AppShell: React.FC<{
     setIsSearchOpen,
     setIsAiModalOpen,
     logout,
+    theme,
+    toggleTheme,
     t,
   } = useApp();
 
@@ -249,20 +254,30 @@ export const AppShell: React.FC<{
         </div>
 
         {/* Right Action Icons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Mobile Search Icon */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-[#0c2f21] transition"
+            className="md:hidden p-2 rounded-md text-slate-300 hover:text-white hover:bg-[#0c2f21] transition"
             aria-label="Search"
           >
             <Search className="w-4 h-4 text-[#d4af37]" />
           </button>
 
+          {/* Theme Toggle (Dark / Light) */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-md bg-[#082117] hover:bg-[#0c2d20] border border-[#143e2f] text-[#d4af37] transition cursor-pointer flex items-center justify-center shadow-sm"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-[#d4af37]" /> : <Moon className="w-4 h-4 text-[#d4af37]" />}
+          </button>
+
           {/* AI Advisor Button */}
           <button
             onClick={() => setIsAiModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#08281e] hover:bg-[#0e3b2c] border border-[#d4af37]/30 text-[#d4af37] text-xs font-bold transition shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#08281e] hover:bg-[#0e3b2c] border border-[#d4af37]/40 text-[#d4af37] text-xs font-semibold transition shadow-sm cursor-pointer"
             title="AI Procurement Intelligence"
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -274,20 +289,20 @@ export const AppShell: React.FC<{
             <div className="relative">
               <button
                 onClick={() => setQuickCreateOpen(!quickCreateOpen)}
-                className="p-2 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold shadow-md shadow-[#d4af37]/15 transition active:scale-95 flex items-center justify-center cursor-pointer"
+                className="p-2 rounded-md bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold shadow-md shadow-[#d4af37]/15 transition active:scale-95 flex items-center justify-center cursor-pointer"
                 title="Quick Action"
               >
                 <Plus className="w-4 h-4" />
               </button>
 
               {quickCreateOpen && (
-                <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-[#082117] border border-[#143e2f] shadow-2xl p-2 z-50">
+                <div className="absolute right-0 mt-2 w-52 rounded-xl bg-[#082117] border border-[#143e2f] shadow-2xl p-1.5 z-50">
                   <button
                     onClick={() => {
                       onOpenNewRequest();
                       setQuickCreateOpen(false);
                     }}
-                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 rounded-md hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
                   >
                     <FileText className="w-4 h-4 text-[#d4af37]" />
                     <span>{t('newRequest')}</span>
@@ -297,9 +312,9 @@ export const AppShell: React.FC<{
                       onOpenNewPO();
                       setQuickCreateOpen(false);
                     }}
-                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 rounded-md hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
                   >
-                    <ShoppingCart className="w-4 h-4 text-emerald-400" />
+                    <ShoppingCart className="w-4 h-4 text-[#d4af37]" />
                     <span>{t('createPO')}</span>
                   </button>
                   {orgConfig.hasPhysicalGoods && (
@@ -308,9 +323,9 @@ export const AppShell: React.FC<{
                         onOpenNewGRN();
                         setQuickCreateOpen(false);
                       }}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
+                      className="w-full text-left px-3 py-2 rounded-md hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
                     >
-                      <Truck className="w-4 h-4 text-sky-400" />
+                      <Truck className="w-4 h-4 text-emerald-400" />
                       <span>{t('recordGRN')}</span>
                     </button>
                   )}
@@ -320,9 +335,9 @@ export const AppShell: React.FC<{
                         onOpenNewInvoice();
                         setQuickCreateOpen(false);
                       }}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
+                      className="w-full text-left px-3 py-2 rounded-md hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
                     >
-                      <CreditCard className="w-4 h-4 text-amber-400" />
+                      <CreditCard className="w-4 h-4 text-[#d4af37]" />
                       <span>{t('enterInvoice')}</span>
                     </button>
                   )}
@@ -332,9 +347,9 @@ export const AppShell: React.FC<{
                         onOpenNewVendor();
                         setQuickCreateOpen(false);
                       }}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
+                      className="w-full text-left px-3 py-2 rounded-md hover:bg-[#0c2d20] text-xs font-semibold text-slate-200 flex items-center gap-2"
                     >
-                      <Users className="w-4 h-4 text-emerald-300" />
+                      <Users className="w-4 h-4 text-emerald-400" />
                       <span>{t('onboardVendor')}</span>
                     </button>
                   )}
@@ -697,8 +712,11 @@ export const AppShell: React.FC<{
         )}
 
         {/* MAIN VIEW CONTAINER */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 bg-[#04140e]">
-          <div className="max-w-7xl mx-auto">{children}</div>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 bg-[#04140e] overflow-x-hidden">
+          <div className="max-w-7xl mx-auto w-full">
+            <InterAccountRelay />
+            {children}
+          </div>
         </main>
       </div>
 
@@ -963,15 +981,6 @@ export const AppShell: React.FC<{
             </button>
           </>
         )}
-
-        {/* 5th Tab: Menu Drawer Toggle */}
-        <button
-          onClick={() => setMobileMenuOpen(true)}
-          className="flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl text-[10px] font-bold text-slate-400 hover:text-white transition"
-        >
-          <Menu className="w-4 h-4" />
-          <span>Menu</span>
-        </button>
       </nav>
     </div>
   );

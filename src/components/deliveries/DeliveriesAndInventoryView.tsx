@@ -110,11 +110,11 @@ export const DeliveriesAndInventoryView: React.FC<{
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+          <div className="flex items-center gap-1 bg-[#082117] p-1 rounded-lg border border-[#143e2f] text-xs">
             <button
               onClick={() => setActiveTab('deliveries')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === 'deliveries' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1.5 rounded-md font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'deliveries' ? 'bg-[#d4af37] text-[#051b14]' : 'text-slate-300 hover:text-white hover:bg-[#0c2d20]'
               }`}
             >
               <Truck className="w-3.5 h-3.5" />
@@ -122,8 +122,8 @@ export const DeliveriesAndInventoryView: React.FC<{
             </button>
             <button
               onClick={() => setActiveTab('inventory')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === 'inventory' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1.5 rounded-md font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'inventory' ? 'bg-[#d4af37] text-[#051b14]' : 'text-slate-300 hover:text-white hover:bg-[#0c2d20]'
               }`}
             >
               <Package className="w-3.5 h-3.5" />
@@ -131,8 +131,8 @@ export const DeliveriesAndInventoryView: React.FC<{
             </button>
             <button
               onClick={() => setActiveTab('movements')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === 'movements' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1.5 rounded-md font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'movements' ? 'bg-[#d4af37] text-[#051b14]' : 'text-slate-300 hover:text-white hover:bg-[#0c2d20]'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -142,7 +142,7 @@ export const DeliveriesAndInventoryView: React.FC<{
 
           <button
             onClick={() => setIsOpenNewGRN(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-md transition"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] text-xs font-bold shadow-md transition cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Record GRN</span>
@@ -151,12 +151,74 @@ export const DeliveriesAndInventoryView: React.FC<{
       </div>
 
       {activeTab === 'deliveries' && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-3">
+        <div className="space-y-6">
+          {/* INBOUND SHIPMENTS IN TRANSIT (Dispatched by Vendors) */}
+          <div className="p-5 rounded-xl border border-[#143e2f] bg-[#082117] space-y-3 text-left">
+            <div className="flex items-center justify-between pb-3 border-b border-[#143e2f]">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-md bg-[#092b1f] border border-[#d4af37]/40 flex items-center justify-center text-[#d4af37]">
+                  <Truck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Inbound Vendor Shipments in Transit</h3>
+                  <p className="text-[11px] text-slate-400">
+                    Waybills & dispatch tracking logged by suppliers in the Vendor Portal.
+                  </p>
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#051710] text-[#d4af37] border border-[#143e2f]">
+                {purchaseOrders.filter((p) => p.status === 'in_transit' || p.trackingNumber).length} active shipments
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              {purchaseOrders
+                .filter((p) => p.status === 'in_transit' || p.trackingNumber)
+                .map((po) => (
+                  <div key={po.id} className="p-4 rounded-lg bg-[#051710] border border-[#143e2f] space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-bold text-[#d4af37]">{po.poNumber}</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#092b1f] text-emerald-400 border border-emerald-600/40">
+                        {po.status === 'in_transit' ? 'In Transit / Dispatched' : po.status.toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="text-xs font-bold text-white">{po.vendorName}</div>
+                    <div className="text-[11px] text-slate-300">
+                      Waybill / Tracking: <strong className="text-white font-mono">{po.trackingNumber || 'TRK-984210'}</strong>
+                    </div>
+                    <div className="text-[11px] text-slate-400">
+                      Delivery Target: {po.expectedDeliveryDate || 'Standard 14 Days'} • Destination: {po.deliveryAddress}
+                    </div>
+                    <div className="pt-2 border-t border-[#143e2f] flex items-center justify-between">
+                      <span className="text-xs font-bold text-white">{formatCurrency(po.totalAmount)}</span>
+                      <button
+                        onClick={() => {
+                          setSelectedPOId(po.id);
+                          setIsOpenNewGRN(true);
+                        }}
+                        className="py-1 px-3 rounded-md bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>Dock Inspection (Log GRN)</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* HISTORICAL GRN LEDGER */}
+          <div className="space-y-3 text-left">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-white">Inspected Goods Receipt Notes (GRN Ledger)</h3>
+              <span className="text-xs text-slate-400">{goodsReceipts.length} inspection records</span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3">
             {goodsReceipts.map((grn) => (
               <div
                 key={grn.id}
-                className="p-5 rounded-2xl border border-slate-800 bg-slate-900/90 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="p-5 rounded-xl border border-[#143e2f] bg-[#082117] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="space-y-1.5 max-w-2xl">
                   <div className="flex items-center gap-2">
@@ -196,6 +258,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                 </div>
               </div>
             ))}
+            </div>
           </div>
         </div>
       )}
@@ -208,21 +271,21 @@ export const DeliveriesAndInventoryView: React.FC<{
               return (
                 <div
                   key={item.id}
-                  className={`p-5 rounded-2xl border text-left flex flex-col justify-between transition ${
+                  className={`p-5 rounded-xl border text-left flex flex-col justify-between transition ${
                     isLowStock
-                      ? 'border-rose-500/40 bg-slate-900 shadow-lg shadow-rose-950/20'
-                      : 'border-slate-800 bg-slate-900'
+                      ? 'border-rose-500/40 bg-[#082117] shadow-lg shadow-rose-950/20'
+                      : 'border-[#143e2f] bg-[#082117]'
                   }`}
                 >
                   <div>
                     <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="font-mono font-bold text-indigo-400">{item.sku}</span>
+                      <span className="font-mono font-bold text-[#d4af37]">{item.sku}</span>
                       {isLowStock ? (
-                        <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded text-rose-400 border border-rose-800/40 bg-rose-950/60 text-[10px] font-bold">
                           Low Stock Alert
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded text-emerald-400 border border-emerald-600/40 bg-emerald-950/60 text-[10px] font-bold">
                           Optimal Stock
                         </span>
                       )}
@@ -236,7 +299,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                       <span className="text-xs text-slate-400">{item.unit} in stock</span>
                     </div>
 
-                    <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden mb-3 border border-slate-800">
+                    <div className="w-full bg-[#051710] h-1.5 rounded-full overflow-hidden mb-3 border border-[#143e2f]">
                       <div
                         className={`h-full rounded-full ${
                           isLowStock ? 'bg-rose-500' : 'bg-emerald-500'
@@ -247,19 +310,19 @@ export const DeliveriesAndInventoryView: React.FC<{
                       />
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-500">
+                    <div className="flex items-center justify-between text-[11px] text-slate-400">
                       <span>Safety Min: {item.minimumStock}</span>
                       <span>Reorder At: {item.reorderLevel}</span>
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-                    <span className="text-xs font-mono text-slate-300">
+                  <div className="mt-4 pt-3 border-t border-[#143e2f] flex items-center justify-between">
+                    <span className="text-xs font-mono text-[#d4af37] font-semibold">
                       Avg: {formatCurrency(item.averageUnitCost)}
                     </span>
                     <button
                       onClick={() => setAdjustModalItem(item)}
-                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition"
+                      className="px-3 py-1 rounded-lg bg-[#051710] hover:bg-[#0c2d20] border border-[#143e2f] text-xs font-semibold text-slate-200 transition cursor-pointer"
                     >
                       Adjust
                     </button>
@@ -272,7 +335,7 @@ export const DeliveriesAndInventoryView: React.FC<{
       )}
 
       {activeTab === 'movements' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-4">
+        <div className="rounded-xl border border-[#143e2f] bg-[#082117] p-5 space-y-4">
           <div>
             <h3 className="text-sm font-bold text-white">Stock Movement Audit Trail</h3>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -283,7 +346,7 @@ export const DeliveriesAndInventoryView: React.FC<{
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                <tr className="border-b border-[#143e2f] text-slate-400 uppercase text-[10px] tracking-wider">
                   <th className="pb-3">Timestamp</th>
                   <th className="pb-3">Item Description</th>
                   <th className="pb-3">Action Type</th>
@@ -293,13 +356,13 @@ export const DeliveriesAndInventoryView: React.FC<{
                   <th className="pb-3 text-right">Logged By</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/80">
+              <tbody className="divide-y divide-[#143e2f]">
                 {stockMovements.map((mov) => (
                   <tr key={mov.id} className="text-slate-300">
                     <td className="py-3 font-mono text-slate-400">{mov.timestamp.split('T')[0]}</td>
                     <td className="py-3 font-bold text-white">{mov.itemName}</td>
                     <td className="py-3">
-                      <span className="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-bold text-slate-300 capitalize">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#051710] border border-[#143e2f] text-slate-300 capitalize">
                         {mov.movementType.replace('_', ' ')}
                       </span>
                     </td>
@@ -307,7 +370,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                       {mov.quantityChange > 0 ? `+${mov.quantityChange}` : mov.quantityChange}
                     </td>
                     <td className="py-3 text-center font-bold text-white">{mov.resultingStock}</td>
-                    <td className="py-3 font-mono text-indigo-400">{mov.referenceId || 'MANUAL-ADJ'}</td>
+                    <td className="py-3 font-mono text-[#d4af37] font-semibold">{mov.referenceId || 'MANUAL-ADJ'}</td>
                     <td className="py-3 text-right text-slate-400">{mov.performedBy}</td>
                   </tr>
                 ))}
@@ -320,7 +383,7 @@ export const DeliveriesAndInventoryView: React.FC<{
       {/* RECORD GRN MODAL */}
       {isOpenNewGRN && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="relative w-full max-w-xl rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-6 sm:p-8 text-left my-8">
+          <div className="relative w-full max-w-xl rounded-xl bg-[#082117] border border-[#143e2f] shadow-2xl p-6 sm:p-8 text-left my-8">
             <h2 className="text-base font-bold text-white mb-1">Record Physical Goods Receipt Note (GRN)</h2>
             <p className="text-xs text-slate-400 mb-5">
               Receiving goods automatically syncs inventory stock in the selected warehouse.
@@ -332,7 +395,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                 <select
                   value={selectedPOId}
                   onChange={(e) => setSelectedPOId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#d4af37]"
                 >
                   {purchaseOrders.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -350,7 +413,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                     required
                     value={deliveryNoteNumber}
                     onChange={(e) => setDeliveryNoteNumber(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
                 <div>
@@ -358,7 +421,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                   <select
                     value={locationId}
                     onChange={(e) => setLocationId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                    className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#d4af37]"
                   >
                     {locations.map((l) => (
                       <option key={l.id} value={l.id}>
@@ -369,7 +432,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                 </div>
               </div>
 
-              <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
+              <div className="p-3.5 bg-[#051710] rounded-lg border border-[#143e2f] space-y-3">
                 <span className="text-xs font-bold text-white block">Dock Inspection Counts</span>
                 <div className="grid grid-cols-3 gap-2">
                   <div>
@@ -379,7 +442,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                       min="0"
                       value={receivedQtyInput}
                       onChange={(e) => setReceivedQtyInput(Number(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white text-center"
+                      className="w-full bg-[#082117] border border-[#143e2f] rounded-lg p-2 text-xs text-white text-center"
                     />
                   </div>
                   <div>
@@ -389,17 +452,17 @@ export const DeliveriesAndInventoryView: React.FC<{
                       min="0"
                       value={damagedQtyInput}
                       onChange={(e) => setDamagedQtyInput(Number(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white text-center"
+                      className="w-full bg-[#082117] border border-[#143e2f] rounded-lg p-2 text-xs text-white text-center"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-amber-400 mb-1">Missing Qty</label>
+                    <label className="block text-[10px] text-[#d4af37] mb-1">Missing Qty</label>
                     <input
                       type="number"
                       min="0"
                       value={missingQtyInput}
                       onChange={(e) => setMissingQtyInput(Number(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white text-center"
+                      className="w-full bg-[#082117] border border-[#143e2f] rounded-lg p-2 text-xs text-white text-center"
                     />
                   </div>
                 </div>
@@ -412,21 +475,21 @@ export const DeliveriesAndInventoryView: React.FC<{
                   value={comments}
                   onChange={(e) => setComments(e.target.value)}
                   placeholder="Note damages, batch numbers, expiry dates, or freight notes..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#d4af37]"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-[#143e2f]">
                 <button
                   type="button"
                   onClick={() => setIsOpenNewGRN(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition"
+                  className="px-6 py-2.5 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs shadow-md transition cursor-pointer"
                 >
                   Confirm & Sync Inventory
                 </button>
@@ -439,7 +502,7 @@ export const DeliveriesAndInventoryView: React.FC<{
       {/* ADJUST STOCK MODAL */}
       {adjustModalItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl text-left">
+          <div className="w-full max-w-md rounded-xl bg-[#082117] border border-[#143e2f] p-6 shadow-2xl text-left">
             <h3 className="text-sm font-bold text-white">Adjust Stock: {adjustModalItem.name}</h3>
             <p className="text-xs text-slate-400 mt-1">Current Stock: {adjustModalItem.currentStock} {adjustModalItem.unit}</p>
 
@@ -451,7 +514,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                   value={adjustQty}
                   onChange={(e) => setAdjustQty(Number(e.target.value))}
                   placeholder="e.g. +5 or -2"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                 />
               </div>
 
@@ -461,7 +524,7 @@ export const DeliveriesAndInventoryView: React.FC<{
                   type="text"
                   value={adjustReason}
                   onChange={(e) => setAdjustReason(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                 />
               </div>
             </div>
@@ -469,13 +532,13 @@ export const DeliveriesAndInventoryView: React.FC<{
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={() => setAdjustModalItem(null)}
-                className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
+                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleApplyAdjustment}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs"
+                className="px-4 py-2 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs cursor-pointer"
               >
                 Apply Adjustment
               </button>

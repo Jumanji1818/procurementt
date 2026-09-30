@@ -85,6 +85,10 @@ interface AppContextType {
 
   // Auth State & Actions
   isAuthenticated: boolean;
+  theme: 'dark' | 'light';
+  setTheme: (theme: 'dark' | 'light') => void;
+  toggleTheme: () => void;
+  resetDemoData: () => void;
   login: (email: string, role?: UserRole) => boolean;
   signup: (
     name: string,
@@ -241,6 +245,57 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isAPKModalOpen, setIsAPKModalOpen] = useState(false);
+
+  const [theme, setThemeState] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('procura_theme') as 'dark' | 'light') || 'dark';
+  });
+
+  const setTheme = (t: 'dark' | 'light') => {
+    setThemeState(t);
+    localStorage.setItem('procura_theme', t);
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    }
+  }, [theme]);
+
+  const resetDemoData = () => {
+    setRequests(sampleRequests);
+    setRfqs(sampleRFQs);
+    setBids(sampleBids);
+    setVendors(sampleVendors);
+    setPurchaseOrders(samplePurchaseOrders);
+    setGoodsReceipts(sampleGoodsReceipts);
+    setInventoryItems(sampleInventoryItems);
+    setStockMovements(sampleStockMovements);
+    setInvoices(sampleInvoices);
+    setPayments(samplePayments);
+    setBudgets(sampleBudgets);
+    setContracts(sampleContracts);
+    setExceptions(sampleExceptions);
+    setNotifications(sampleNotifications);
+    setUsers(sampleUsers);
+    setOrgConfig(initialOrgConfig);
+    localStorage.removeItem('procura_org_config');
+    addAudit('DEMO_RESET', 'System', 'demo_data', 'Pristine demo dataset restored for presentation.');
+  };
 
   useEffect(() => {
     localStorage.setItem('procura_org_config', JSON.stringify(orgConfig));
@@ -674,7 +729,21 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       })
     );
 
-    addAudit('REQUEST_APPROVED', 'ProcurementRequest', target.requestNumber, `Approved by ${currentUser.name}`);
+    // Notify Procurement Office & Requester of approval
+    setNotifications((prev) => [
+      {
+        id: `notif_${Date.now()}`,
+        title: 'Requisition Approved → Transferred to Procurement',
+        message: `${target.requestNumber} approved by ${currentUser.name}. Ready for RFQ tender or PO issuance.`,
+        type: 'approval',
+        timestamp: 'Just now',
+        read: false,
+        linkTab: 'requests',
+      },
+      ...prev,
+    ]);
+
+    addAudit('REQUEST_APPROVED', 'ProcurementRequest', target.requestNumber, `Approved by ${currentUser.name} and transferred to Procurement Office.`);
   };
 
   const rejectRequest = (id: string, reason?: string) => {
@@ -1102,6 +1171,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         loadPreset,
 
         isAuthenticated,
+        theme,
+        setTheme,
+        toggleTheme,
+        resetDemoData,
         login,
         signup,
         logout,

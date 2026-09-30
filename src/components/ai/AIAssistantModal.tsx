@@ -144,17 +144,17 @@ export const AIAssistantModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-2xl h-[620px] max-h-[90vh] rounded-2xl bg-[#082117] border border-[#143e2f] shadow-2xl flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-2xl h-[620px] max-h-[90vh] rounded-xl bg-[#082117] border border-[#143e2f] shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="p-4 sm:px-6 border-b border-[#143e2f] bg-[#061e15] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-[#092b1f] border border-[#d4af37]/40 text-[#d4af37] shadow-md">
+            <div className="p-2 rounded-md bg-[#092b1f] border border-[#d4af37]/40 text-[#d4af37] shadow-sm">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-white">Procura Intelligence Advisor</h3>
-                <span className="px-2 py-0.5 rounded-full bg-[#0d3b2b] text-[#d4af37] text-[10px] font-semibold flex items-center gap-1 border border-[#d4af37]/30">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#0d3b2b] text-[#d4af37] flex items-center gap-1 border border-[#d4af37]/30">
                   <ShieldCheck className="w-3 h-3" /> RBAC Enforced
                 </span>
               </div>
@@ -163,7 +163,7 @@ export const AIAssistantModal: React.FC = () => {
           </div>
           <button
             onClick={() => setIsAiModalOpen(false)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#0c2d20] transition"
+            className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-[#0c2d20] transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -176,7 +176,7 @@ export const AIAssistantModal: React.FC = () => {
             <button
               key={idx}
               onClick={() => handleSend(p)}
-              className="flex-shrink-0 px-2.5 py-1 rounded-full bg-[#082117] hover:bg-[#0c2d20] hover:text-[#d4af37] text-slate-300 border border-[#143e2f] transition"
+              className="flex-shrink-0 px-2.5 py-1 rounded-md bg-[#082117] hover:bg-[#0c2d20] hover:text-[#d4af37] text-slate-300 border border-[#143e2f] transition cursor-pointer"
             >
               {p}
             </button>

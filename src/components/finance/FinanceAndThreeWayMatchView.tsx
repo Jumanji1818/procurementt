@@ -115,11 +115,11 @@ export const FinanceAndThreeWayMatchView: React.FC<{
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+          <div className="flex items-center gap-1 bg-[#082117] p-1 rounded-lg border border-[#143e2f] text-xs">
             <button
               onClick={() => setActiveTab('invoices')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === 'invoices' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1.5 rounded-md font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'invoices' ? 'bg-[#d4af37] text-[#051b14]' : 'text-slate-300 hover:text-white hover:bg-[#0c2d20]'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -127,8 +127,8 @@ export const FinanceAndThreeWayMatchView: React.FC<{
             </button>
             <button
               onClick={() => setActiveTab('payments')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === 'payments' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1.5 rounded-md font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'payments' ? 'bg-[#d4af37] text-[#051b14]' : 'text-slate-300 hover:text-white hover:bg-[#0c2d20]'
               }`}
             >
               <CreditCard className="w-3.5 h-3.5" />
@@ -136,8 +136,8 @@ export const FinanceAndThreeWayMatchView: React.FC<{
             </button>
             <button
               onClick={() => setActiveTab('budgets')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === 'budgets' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1.5 rounded-md font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'budgets' ? 'bg-[#d4af37] text-[#051b14]' : 'text-slate-300 hover:text-white hover:bg-[#0c2d20]'
               }`}
             >
               <DollarSign className="w-3.5 h-3.5" />
@@ -147,7 +147,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
 
           <button
             onClick={() => setIsOpenNewInvoice(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-md transition"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] text-xs font-bold shadow-md transition cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Invoice</span>
@@ -165,10 +165,10 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                 <div
                   key={inv.id}
                   onClick={() => setSelectedInvoice(inv)}
-                  className={`p-5 rounded-2xl border cursor-pointer transition text-left ${
+                  className={`p-5 rounded-xl border cursor-pointer transition text-left ${
                     isSelected
-                      ? 'border-indigo-500 bg-slate-900 shadow-lg shadow-indigo-500/10'
-                      : 'border-slate-800 bg-slate-900/80 hover:bg-slate-900'
+                      ? 'border-[#d4af37] bg-[#0c2d20] shadow-md shadow-[#d4af37]/10'
+                      : 'border-[#143e2f] bg-[#082117] hover:border-[#1e5641]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3 mb-2">
@@ -176,15 +176,15 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs font-bold text-white">{inv.invoiceNumber}</span>
                         {isMatched ? (
-                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded text-emerald-400 border border-emerald-600/40 bg-emerald-950/60 text-[10px] font-bold flex items-center gap-1">
                             <ShieldCheck className="w-3 h-3" /> 3-Way Matched
                           </span>
                         ) : (
-                          <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 text-[10px] font-bold flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded text-rose-400 border border-rose-800/40 bg-rose-950/60 text-[10px] font-bold flex items-center gap-1">
                             <AlertTriangle className="w-3 h-3" /> Discrepancy Exception
                           </span>
                         )}
-                        <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-bold capitalize">
+                        <span className="px-2 py-0.5 rounded bg-[#051710] border border-[#143e2f] text-slate-300 text-[10px] font-bold capitalize">
                           {inv.status}
                         </span>
                       </div>
@@ -213,8 +213,8 @@ export const FinanceAndThreeWayMatchView: React.FC<{
           {/* 3-WAY MATCH INSPECTION SIDEBAR DRAWER (Mandatory per specification) */}
           <div className="lg:col-span-1">
             {selectedInvoice ? (
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 space-y-4 shadow-xl">
-                <div className="pb-3 border-b border-slate-800">
+              <div className="rounded-xl border border-[#143e2f] bg-[#082117] p-5 space-y-4 shadow-xl">
+                <div className="pb-3 border-b border-[#143e2f]">
                   <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
                     Three-Way Match Verification Engine
                   </span>
@@ -224,7 +224,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
 
                 {/* Side-by-side audit checks */}
                 <div className="space-y-2.5 text-xs">
-                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div className="p-3 bg-[#051710] rounded-lg border border-[#143e2f] flex items-center justify-between">
                     <div>
                       <span className="font-semibold text-white block">1. PO Authorization Check</span>
                       <span className="text-[11px] text-slate-400">PO: {selectedInvoice.poNumber}</span>
@@ -232,7 +232,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                     <span className="text-emerald-400 font-bold">Passed</span>
                   </div>
 
-                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div className="p-3 bg-[#051710] rounded-lg border border-[#143e2f] flex items-center justify-between">
                     <div>
                       <span className="font-semibold text-white block">2. Goods Receipt (GRN) Audit</span>
                       <span className="text-[11px] text-slate-400">GRN: {selectedInvoice.grnNumber || 'Pending GRN'}</span>
@@ -246,7 +246,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                     </span>
                   </div>
 
-                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div className="p-3 bg-[#051710] rounded-lg border border-[#143e2f] flex items-center justify-between">
                     <div>
                       <span className="font-semibold text-white block">3. Quantity & Price Match</span>
                       <span className="text-[11px] text-slate-400">Tolerance: 0% variance</span>
@@ -262,11 +262,11 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                 </div>
 
                 {/* Actions */}
-                <div className="pt-3 border-t border-slate-800 space-y-2">
+                <div className="pt-3 border-t border-[#143e2f] space-y-2">
                   {selectedInvoice.status !== 'paid' && (
                     <button
                       onClick={() => setPayModalInvoice(selectedInvoice)}
-                      className="w-full py-2.5 px-4 rounded-xl bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-2.5 px-4 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <CreditCard className="w-4 h-4" />
                       <span>Authorize & Release Payment</span>
@@ -274,15 +274,15 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                   )}
 
                   {selectedInvoice.status === 'paid' && (
-                    <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs text-center font-bold">
-                      ✓ Invoice Settled & Cleared
+                    <div className="p-3 rounded-lg bg-emerald-950/60 border border-emerald-600/40 text-emerald-400 text-xs text-center font-bold">
+                      ✓ Invoice Settled & Cleared to Vendor Account
                     </div>
                   )}
 
                   {!selectedInvoice.threeWayMatch.isMatched && selectedInvoice.status !== 'approved' && (
                     <button
                       onClick={() => approveInvoice(selectedInvoice.id)}
-                      className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition"
+                      className="w-full py-2 px-3 rounded-lg bg-[#051710] hover:bg-[#0c2d20] border border-[#143e2f] text-slate-200 text-xs font-semibold transition cursor-pointer"
                     >
                       Management Override (Approve Anyway)
                     </button>
@@ -290,7 +290,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                 </div>
               </div>
             ) : (
-              <div className="p-8 rounded-2xl border border-slate-800/80 bg-slate-900/30 text-center text-xs text-slate-500">
+              <div className="p-8 rounded-xl border border-[#143e2f] bg-[#082117] text-center text-xs text-slate-400">
                 Select an invoice on the left to review the Three-Way Matching comparison between PO, GRN, and billed lines.
               </div>
             )}
@@ -299,7 +299,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
       )}
 
       {activeTab === 'payments' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-4">
+        <div className="rounded-xl border border-[#143e2f] bg-[#082117] p-5 space-y-4">
           <div>
             <h3 className="text-sm font-bold text-white">Disbursement Settlement Ledger</h3>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -310,7 +310,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                <tr className="border-b border-[#143e2f] text-slate-400 uppercase text-[10px] tracking-wider">
                   <th className="pb-3">Disbursement #</th>
                   <th className="pb-3">Vendor</th>
                   <th className="pb-3">Invoice #</th>
@@ -320,10 +320,10 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                   <th className="pb-3 text-right">Amount Cleared</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/80">
+              <tbody className="divide-y divide-[#143e2f]">
                 {payments.map((p) => (
                   <tr key={p.id} className="text-slate-300">
-                    <td className="py-3.5 font-mono font-bold text-indigo-400">{p.paymentNumber}</td>
+                    <td className="py-3.5 font-mono font-bold text-[#d4af37]">{p.paymentNumber}</td>
                     <td className="py-3.5 font-bold text-white">{p.vendorName}</td>
                     <td className="py-3.5 font-mono text-slate-400">{p.invoiceNumber}</td>
                     <td className="py-3.5 capitalize">{p.paymentMethod.replace('_', ' ')}</td>
@@ -346,14 +346,14 @@ export const FinanceAndThreeWayMatchView: React.FC<{
             const spentPct = Math.round((b.spentAmount / b.allocatedAmount) * 100);
             const committedPct = Math.round((b.committedAmount / b.allocatedAmount) * 100);
             return (
-              <div key={b.id} className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3">
+              <div key={b.id} className="p-5 rounded-xl border border-[#143e2f] bg-[#082117] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-mono font-bold text-indigo-400">{b.code}</span>
+                  <span className="font-mono font-bold text-[#d4af37]">{b.code}</span>
                   <span className="text-slate-400">{b.fiscalYear}</span>
                 </div>
 
                 <h3 className="text-sm font-bold text-white">{b.name}</h3>
-                <div className="text-[11px] text-slate-500">Category: {b.category}</div>
+                <div className="text-[11px] text-slate-400">Category: {b.category}</div>
 
                 <div className="pt-2">
                   <div className="flex justify-between text-xs font-semibold mb-1">
@@ -361,18 +361,18 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                     <span className="text-white font-mono">{formatCurrency(b.allocatedAmount)}</span>
                   </div>
 
-                  <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden flex border border-slate-800">
-                    <div className="bg-indigo-500 h-full" style={{ width: `${spentPct}%` }} />
-                    <div className="bg-amber-500 h-full" style={{ width: `${committedPct}%` }} />
+                  <div className="w-full bg-[#051710] h-2 rounded-full overflow-hidden flex border border-[#143e2f]">
+                    <div className="bg-emerald-500 h-full" style={{ width: `${spentPct}%` }} />
+                    <div className="bg-[#d4af37] h-full" style={{ width: `${committedPct}%` }} />
                   </div>
 
-                  <div className="flex justify-between text-[11px] text-slate-500 mt-2">
+                  <div className="flex justify-between text-[11px] text-slate-400 mt-2">
                     <span>Spent: {spentPct}%</span>
                     <span>Committed: {committedPct}%</span>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800 flex justify-between text-xs">
+                <div className="pt-2 border-t border-[#143e2f] flex justify-between text-xs">
                   <span className="text-slate-400">Remaining Liquidity:</span>
                   <span className="font-bold text-emerald-400">{formatCurrency(b.remainingAmount)}</span>
                 </div>
@@ -385,15 +385,15 @@ export const FinanceAndThreeWayMatchView: React.FC<{
       {/* DISBURSEMENT / PAYMENT MODAL */}
       {payModalInvoice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl text-left">
+          <div className="w-full max-w-md rounded-xl bg-[#082117] border border-[#143e2f] p-6 shadow-2xl text-left">
             <h3 className="text-sm font-bold text-white">Release Payment for {payModalInvoice.invoiceNumber}</h3>
             <p className="text-xs text-slate-400 mt-1">
               Recipient: <strong className="text-white">{payModalInvoice.vendorName}</strong>
             </p>
 
-            <div className="my-4 p-4 rounded-xl bg-slate-950 border border-slate-800 text-center">
+            <div className="my-4 p-4 rounded-lg bg-[#051710] border border-[#143e2f] text-center">
               <span className="text-xs text-slate-400">Total Settlement Value</span>
-              <div className="text-2xl font-black text-white mt-0.5">
+              <div className="text-2xl font-black text-[#d4af37] mt-0.5">
                 {formatCurrency(payModalInvoice.totalAmount)}
               </div>
             </div>
@@ -404,7 +404,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                 <select
                   value={payMethod}
                   onChange={(e) => setPayMethod(e.target.value as any)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                 >
                   <option value="bank_transfer">Direct Corporate Wire / SWIFT</option>
                   <option value="credit_card">Corporate Purchasing Card</option>
@@ -418,7 +418,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                   type="text"
                   value={txnRef}
                   onChange={(e) => setTxnRef(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white font-mono"
                 />
               </div>
             </div>
@@ -426,13 +426,13 @@ export const FinanceAndThreeWayMatchView: React.FC<{
             <div className="mt-5 flex justify-end gap-2">
               <button
                 onClick={() => setPayModalInvoice(null)}
-                className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
+                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleExecutePayment}
-                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md"
+                className="px-5 py-2 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs shadow-md cursor-pointer"
               >
                 Confirm Wire Release
               </button>
@@ -444,7 +444,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
       {/* CREATE INVOICE MODAL */}
       {isOpenNewInvoice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-6 sm:p-8 text-left my-8">
+          <div className="relative w-full max-w-lg rounded-xl bg-[#082117] border border-[#143e2f] shadow-2xl p-6 sm:p-8 text-left my-8">
             <h2 className="text-base font-bold text-white mb-1">Upload / Register Supplier Invoice</h2>
             <p className="text-xs text-slate-400 mb-5">
               The Three-Way Matching engine will automatically compare the line items against the Purchase Order and Goods Receipt.
@@ -456,7 +456,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                 <select
                   value={selectedPOId}
                   onChange={(e) => setSelectedPOId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                 >
                   {purchaseOrders.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -473,7 +473,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                   required
                   value={vendorInvNum}
                   onChange={(e) => setVendorInvNum(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                  className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                 />
               </div>
 
@@ -485,7 +485,7 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                     min="1"
                     value={billedQty}
                     onChange={(e) => setBilledQty(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                    className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                   />
                 </div>
                 <div>
@@ -495,26 +495,26 @@ export const FinanceAndThreeWayMatchView: React.FC<{
                     step="any"
                     value={billedAmount}
                     onChange={(e) => setBilledAmount(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                    className="w-full bg-[#051710] border border-[#143e2f] rounded-lg px-3 py-2 text-xs text-white"
                   />
                 </div>
               </div>
 
-              <div className="p-3 bg-purple-950/20 border border-purple-500/20 rounded-xl text-xs text-purple-300">
+              <div className="p-3 bg-[#092b1f] border border-[#d4af37]/30 rounded-lg text-xs text-[#d4af37]">
                 💡 <strong>Tip for Testing:</strong> Enter a billed quantity higher than what was received on the Goods Receipt Note (GRN) to test the automated discrepancy interception!
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-slate-800">
+              <div className="flex justify-end gap-2 pt-4 border-t border-[#143e2f]">
                 <button
                   type="button"
                   onClick={() => setIsOpenNewInvoice(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs"
+                  className="px-6 py-2 rounded-lg bg-[#d4af37] hover:bg-[#c49f2b] text-[#051b14] font-bold text-xs cursor-pointer"
                 >
                   Run 3-Way Match & Submit
                 </button>
